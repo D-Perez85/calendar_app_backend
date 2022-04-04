@@ -1,21 +1,22 @@
 const express = require('express'); 
+require('dotenv').config();
 
 //Create Server 
 const app = express(); 
-const port = 4000; 
 
+//Directorio Publico
+app.use(express.static('public'))
 
 //Routes
-app.get('/', (req, res)=>{
-    res.json({
-        ok: true
-    })
-})
-
+// app.get('/', (req, res)=>{
+//     res.json({
+//         ok: true
+//     })
+// })
 
 //Listen to the port
-app.listen(port, ()=>{
-    console.log(`Activo en puerto ${port}`);
+app.listen(process.env.PORT, ()=>{
+    console.log(`Activo en puerto ${process.env.PORT}`);
 }); 
 
 
