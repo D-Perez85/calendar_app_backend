@@ -15,15 +15,15 @@ const loginUser = (req, res)=>{
 }
 
 
-const renew = (req, res)=>{
+const revalidateToken = (req, res)=>{
     res.json({
         ok: true,
-        msg: 'renew'
+        msg: 'revalidate'
     })
 }
 
 module.exports = {
     createUser, 
     loginUser, 
-    renew
+    revalidateToken
 }
