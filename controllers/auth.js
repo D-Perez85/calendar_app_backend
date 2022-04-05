@@ -1,6 +1,8 @@
 const { response } = require("express");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
+const { generateJWT } = require("../helpers/jwt");
+
 
 const createUser = async (req, res = response) => {
   const { email, password } = req.body;
@@ -15,17 +17,23 @@ const createUser = async (req, res = response) => {
     }
 
     user = new User(req.body);
-
+    
+    
+    
+    
     //Encrypt of password
     const salt = bcrypt.genSaltSync();
     user.password = bcrypt.hashSync(password, salt);
-
+    
     await user.save();
+    // Generate of JWT
+    const token = await generateJWT(user.id, user.name); 
 
     res.status(201).json({
       ok: true,
       uid: user.id,
       name: user.name,
+      token 
     });
   } catch (error) {
     res.status(500).json({
@@ -48,7 +56,7 @@ const loginUser = async (req, res = response) => {
       });
     }
 
-    // Confirmar los passwords
+    // Comfirm passwords
     const validPassword = bcrypt.compareSync(password, user.password);
 
     if (!validPassword) {
@@ -57,11 +65,14 @@ const loginUser = async (req, res = response) => {
         msg: "Password wrong",
       });
     }
+    // Generate of JWT
+    const token = await generateJWT(user.id, user.name); 
 
     res.json({
       ok: true,
       uid: user.id,
       name: user.name,
+      token
     });
   } catch (error) {
     res.status(500).json({
