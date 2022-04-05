@@ -1,29 +1,41 @@
-const {response} = require('express'); 
+const {response} = require('express');
 
-const createUser = (req, res = response)=>{
-    res.json({
-        ok: true,
-        msg: 'registro'
-    })
-}
+const createUser = (req, res = response) => {
+    const {name, email, password} = req.body
 
-const loginUser = (req, res)=>{
-    res.json({
-        ok: true,
-        msg: 'login'
-    })
-}
+    if (name.length <= 2) {
+        return res.status(400).json({
+            ok: false,
+            msj: 'El nombre debe ser mayor a 2 caracteres'
+        })
+    }
+        res.json({
+            ok: true,
+            msg: 'registro',
+            name,
+            email,
+            password
+        })
+    }
+
+const loginUser = (req, res = response) => {
+    const { email, password } = req.body
+        res.json({
+            ok: true,
+            msg: 'login',
+            email,
+            password
+        })
+    }
 
 
-const revalidateToken = (req, res)=>{
-    res.json({
-        ok: true,
-        msg: 'revalidate'
-    })
-}
+const revalidateToken = (req, res = response) => {
+        res.json({
+            ok: true,
+            msg: 'revalidate'
+        })
+    }
 
 module.exports = {
-    createUser, 
-    loginUser, 
-    revalidateToken
-}
+        createUser, loginUser, revalidateToken
+    }
