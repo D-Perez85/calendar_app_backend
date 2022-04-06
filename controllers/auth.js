@@ -3,10 +3,8 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const { generateJWT } = require("../helpers/jwt");
 
-
 const createUser = async (req, res = response) => {
   const { email, password } = req.body;
-
   try {
     let user = await User.findOne({ email: email });
     if (user) {
@@ -15,12 +13,8 @@ const createUser = async (req, res = response) => {
         msg: "Email exist in our register",
       });
     }
-
     user = new User(req.body);
-    
-    
-    
-    
+      
     //Encrypt of password
     const salt = bcrypt.genSaltSync();
     user.password = bcrypt.hashSync(password, salt);
@@ -28,7 +22,6 @@ const createUser = async (req, res = response) => {
 
     // Generate of JWT
     const token = await generateJWT(user.id, user.name); 
-
     res.status(201).json({
       ok: true,
       uid: user.id,
@@ -86,11 +79,9 @@ const revalidateToken = async (req, res = response) => {
   const {uid, name} = req; 
   // Generate of JWT
   const token = await generateJWT(uid, name); 
-
-  res.json({
-    ok: true,
-    token
-  })
+    res.json({
+      ok: true,
+      token
+    })
 }
-
 module.exports = { createUser, loginUser, revalidateToken };
