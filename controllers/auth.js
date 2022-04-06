@@ -24,8 +24,8 @@ const createUser = async (req, res = response) => {
     //Encrypt of password
     const salt = bcrypt.genSaltSync();
     user.password = bcrypt.hashSync(password, salt);
-    
     await user.save();
+
     // Generate of JWT
     const token = await generateJWT(user.id, user.name); 
 
@@ -45,7 +45,6 @@ const createUser = async (req, res = response) => {
 
 const loginUser = async (req, res = response) => {
   const { email, password } = req.body;
-
   try {
     const user = await User.findOne({ email });
 
@@ -65,6 +64,7 @@ const loginUser = async (req, res = response) => {
         msg: "Password wrong",
       });
     }
+    
     // Generate of JWT
     const token = await generateJWT(user.id, user.name); 
 
@@ -82,11 +82,15 @@ const loginUser = async (req, res = response) => {
   }
 };
 
-const revalidateToken = (req, res = response) => {
+const revalidateToken = async (req, res = response) => {
+  const {uid, name} = req; 
+  // Generate of JWT
+  const token = await generateJWT(uid, name); 
+
   res.json({
     ok: true,
-    msg: "revalidate",
-  });
-};
+    token
+  })
+}
 
 module.exports = { createUser, loginUser, revalidateToken };
