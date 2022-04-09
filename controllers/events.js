@@ -11,26 +11,23 @@ const getEvents = async( req, res = response ) => {
 
 const createEvent = async( req, res = response ) => {
     const event = new Event(req.body); 
-    console.log(req.body);
 try{
     event.user = req.uid; 
     const eventSaved = await event.save(); 
     res.json({
-        ok: true,
-        msg: eventSaved
-    });
-    
-}catch{
-    console.log(error)
-    res.status(500).json({
-        ok: false,
-        msg: 'Contact the admin'
-    });
-  }
+                ok: true,
+                event: eventSaved
+            })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            ok: false,
+            msg: 'Contact the admin'
+        });
+    }
 }
 
 const updateEvent = async( req, res = response ) => {
-
     res.json({
         ok: true,
         msg: 'update'
